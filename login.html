@@ -10,7 +10,8 @@
     <div class="login-container">
         <div class="login-box">
             <h2>Login</h2>
-            <form action="get">
+            <form action="http://localhost:3000/login" method="POST">
+
                 <div class="input-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" placeholder="Enter your username" required>
@@ -26,12 +27,39 @@
                     </label>
                     <a href="signup.html">Forgot Password?</a>
                 </div>
-                <button type="submit" class="btn"> <a href="pbl.html">Login</a></button>
+                <button type="submit" class="btn">Login</button>
             </form>
             <div class="register">
-                <p>Don't have an account? <a href="signup.html">signup here</a></p>
+                <p>Don't have an account? <a href="signup.html">Signup here</a></p>
             </div>
         </div>
     </div>
 </body>
+<script>
+document.querySelector("form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+
+    const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+        alert("Login successful!");
+        window.location.href = "index.html"; // ✅ Redirect to home/dashboard
+    } else {
+        alert("Login failed: " + result.message);
+    }
+});
+</script>
+
 </html>
